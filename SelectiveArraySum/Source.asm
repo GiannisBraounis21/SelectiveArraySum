@@ -13,13 +13,33 @@ SelectiveSummation PROC
 	push ebp
 	mov ebp,esp
 	sub esp,4
-	mov SDWORD PTR [ebp-4],0
-	pushad
+	mov SDWORD PTR [ebp-4],0 ;array index
+	push edi
+	push esi
+	push ebx
 
 	;main body
 
+	;while loop initialization
+	mov esi,[ebp-4]
+	mov edi,[ebp+8]
+	mov eax,0
+	jmp CND
+	;while loop body
+LP:
+	 mov ebx, [edi+esi*4];array[index]
+	 cmp ebx,[ebp+12] ;evaluate the condition array[index] <=sample
+	 jg L1
+	 add eax,ebx      ;sum+=array[index]
+L1:	 inc esi
+	 mov [ebp-4],esi
+CND: cmp esi, arraysize ;if index<arraysize
+	jl LP				;for signed int
+
 	;epilogue
-	popad
+	pop ebx
+	pop esi
+	pop edi
 	mov esp,ebp
 	pop ebp
 	ret 12
