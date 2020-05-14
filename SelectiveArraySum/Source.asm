@@ -9,7 +9,20 @@ message BYTE "The result is :",0
 arraysize = LENGTHOF array
 .code
 SelectiveSummation PROC
-	ret
+	;prologue
+	push ebp
+	mov ebp,esp
+	sub esp,4
+	mov SDWORD PTR [ebp-4],0
+	pushad
+
+	;main body
+
+	;epilogue
+	popad
+	mov esp,ebp
+	pop ebp
+	ret 12
 SelectiveSummation ENDP
 main PROC
 	push OFFSET sum
